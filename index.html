@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UTP Super App Launch</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #003366, #3399ff);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      overflow: hidden;
+    }
+    .launch-container, .countdown-container, .launch-screen {
+      max-width: 600px;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+    .launch-button {
+      background-color: #ffcc00;
+      border: none;
+      padding: 20px 40px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #003366;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+    }
+    .launch-button:hover {
+      background-color: #ffaa00;
+    }
+    .now-live, .countdown-container {
+      display: none;
+      animation: fadeIn 1s ease-in forwards;
+    }
+    .confetti {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      /* background: url('https://media.giphy.com/media/26tOZ42Mg6pbTUPHW/giphy.gif') center/cover no-repeat; */
+      background: url('https://media.giphy.com/media/CgmUXYRV2KCRhU8tip/giphy.gif') center/cover no-repeat;
+      display: none;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .count {
+      font-size: 25rem; /*5rem*/
+      font-weight: bold;
+      animation: pop 0.8s ease-in-out;
+    }
+    @keyframes pop {
+      0% { transform: scale(0.5); opacity: 0; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="launch-container" id="welcomeScreen">
+    <h1>🎉 Welcome to UTP Super App 🎉</h1>
+    <p>The future of performance and communication begins now!</p>
+    <button class="launch-button" onclick="startCountdown()">TAP TO LAUNCH</button>
+  </div>
+
+  <div id="countdownContainer" class="countdown-container">
+    <div id="countDisplay" class="count">3</div>
+  </div>
+
+  <div id="launchScreen" class="launch-screen now-live">
+    <h1>🚀 UTP Super App is Now Live!</h1>
+    <p>Thank you for being part of this amazing journey!</p>
+  </div>
+
+  <div class="confetti" id="confetti"></div>
+
+  <script>
+    function startCountdown() {
+      document.getElementById("welcomeScreen").style.display = "none";
+      const countdown = document.getElementById("countdownContainer");
+      const countDisplay = document.getElementById("countDisplay");
+      countdown.style.display = "block";
+
+      let count = 3;
+      const interval = setInterval(() => {
+        count--;
+        if (count > 0) {
+          countDisplay.innerText = count;
+          countDisplay.style.animation = 'none';
+          void countDisplay.offsetWidth;
+          countDisplay.style.animation = 'pop 0.8s ease-in-out';
+        } else {
+          clearInterval(interval);
+          countdown.style.display = "none";
+          launchApp();
+        }
+      }, 1000);
+    }
+
+    function launchApp() {
+      document.getElementById("launchScreen").style.display = "block";
+      document.getElementById("confetti").style.display = "block";
+    }
+  </script>
+</body>
+</html>
