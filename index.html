@@ -87,11 +87,12 @@
   </style>
 </head>
 <body>
+
   <!-- Welcome screen -->
   <div class="launch-container" id="welcomeScreen">
     <h1>🎉 Welcome to UTP Super App 🎉</h1>
     <p>The future of performance and communication begins now!</p>
-    <button class="launch-button" onclick="startCountdown()">TAP TO LAUNCH</button>
+    <button class="launch-button" id="launchButton">TAP TO LAUNCH</button>
   </div>
 
   <!-- Countdown screen -->
@@ -109,29 +110,26 @@
   <!-- Confetti background -->
   <div class="confetti" id="confetti"></div>
 
-  <!-- Background welcome audio -->
+  <!-- Audio file -->
   <audio id="welcomeAudio" src="Music/Launch1.mp3" loop></audio>
 
-  <!-- JavaScript logic -->
+  <!-- JavaScript -->
   <script>
-    const welcomeAudio = document.getElementById('welcomeAudio');
+    const launchButton = document.getElementById("launchButton");
+    const welcomeAudio = document.getElementById("welcomeAudio");
 
-    // Play audio on first interaction
-    function enableAudioOnInteraction() {
-      welcomeAudio.play().catch(() => {
-        console.log("User gesture needed to play audio.");
+    launchButton.addEventListener("click", function () {
+      // Try to play audio on user click
+      welcomeAudio.play().then(() => {
+        console.log("Audio started.");
+        startCountdown(); // Start countdown after audio starts
+      }).catch(err => {
+        console.error("Audio play error:", err);
+        alert("Click again to enable sound.");
       });
-      document.removeEventListener('click', enableAudioOnInteraction);
-    }
-
-    document.addEventListener('click', enableAudioOnInteraction);
+    });
 
     function startCountdown() {
-      // Stop audio
-      welcomeAudio.pause();
-      welcomeAudio.currentTime = 0;
-
-      // Hide welcome screen, show countdown
       document.getElementById("welcomeScreen").style.display = "none";
       const countdown = document.getElementById("countdownContainer");
       const countDisplay = document.getElementById("countDisplay");
