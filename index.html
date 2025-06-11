@@ -50,7 +50,7 @@
       background-color: #ffaa00;
     }
 
-    .now-live, .countdown-container {
+    .countdown-container, .launch-screen {
       display: none;
       animation: fadeIn 1s ease-in forwards;
     }
@@ -84,9 +84,24 @@
       max-width: 300px;
       margin-bottom: 20px;
     }
+
+    /* Hidden play button */
+    .hidden-play {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 20px;
+      height: 20px;
+      opacity: 0.01;
+      z-index: 1000;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
+
+  <!-- Invisible Play Trigger -->
+  <button id="hiddenPlay" class="hidden-play" title="Click anywhere to enable sound"></button>
 
   <!-- Welcome screen -->
   <div class="launch-container" id="welcomeScreen">
@@ -101,7 +116,7 @@
   </div>
 
   <!-- Final Launch screen -->
-  <div id="launchScreen" class="launch-screen now-live">
+  <div id="launchScreen" class="launch-screen">
     <img src="images/logo1.png" alt="UTP Super App Logo" class="launch-logo">
     <h1>🚀 UTP Super App is Now Live!</h1>
     <p>Thank you for being part of this amazing journey!</p>
@@ -110,23 +125,35 @@
   <!-- Confetti background -->
   <div class="confetti" id="confetti"></div>
 
-  <!-- Audio file -->
+  <!-- Audio elements -->
   <audio id="welcomeAudio" src="Music/Launch5.mp3" loop></audio>
+  <audio id="countdownAudio" src="Music/countdown.mp3"></audio>
+  <audio id="launchFinalAudio" src="Music/launch_reveal.mp3"></audio>
 
   <!-- JavaScript -->
   <script>
+    const hiddenPlayBtn = document.getElementById("hiddenPlay");
     const launchButton = document.getElementById("launchButton");
     const welcomeAudio = document.getElementById("welcomeAudio");
+    const countdownAudio = document.getElementById("countdownAudio");
+    const launchFinalAudio = document.getElementById("launchFinalAudio");
 
-    launchButton.addEventListener("click", function () {
-      // Try to play audio on user click
+    // Step 1: Play background looped music after user interacts
+    hiddenPlayBtn.addEventListener("click", () => {
       welcomeAudio.play().then(() => {
-        console.log("Audio started.");
-        startCountdown(); // Start countdown after audio starts
+        console.log("Background music started.");
       }).catch(err => {
-        console.error("Audio play error:", err);
-        alert("Click again to enable sound.");
+        console.error("Failed to play background music:", err);
       });
+    });
+
+    // Step 2: On Launch Button Click
+    launchButton.addEventListener("click", () => {
+      welcomeAudio.pause(); // Stop background loop
+      welcomeAudio.currentTime = 0;
+
+      countdownAudio.play(); // Play countdown SFX
+      startCountdown(); // Begin countdown
     });
 
     function startCountdown() {
@@ -154,6 +181,11 @@
     function launchApp() {
       document.getElementById("launchScreen").style.display = "block";
       document.getElementById("confetti").style.display = "block";
+
+      // Play final launch music
+      launchFinalAudio.play().catch(err => {
+        console.error("Launch music error:", err);
+      });
     }
   </script>
 </body>
