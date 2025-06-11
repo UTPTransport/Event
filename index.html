@@ -114,18 +114,22 @@
 
   <!-- JavaScript logic -->
   <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const audio = document.getElementById('welcomeAudio');
-      audio.play().catch((error) => {
-        console.log('Autoplay was blocked. Will play on user interaction.');
+    const welcomeAudio = document.getElementById('welcomeAudio');
+
+    // Play audio on first interaction
+    function enableAudioOnInteraction() {
+      welcomeAudio.play().catch(() => {
+        console.log("User gesture needed to play audio.");
       });
-    });
+      document.removeEventListener('click', enableAudioOnInteraction);
+    }
+
+    document.addEventListener('click', enableAudioOnInteraction);
 
     function startCountdown() {
-      // Stop background music
-      const audio = document.getElementById('welcomeAudio');
-      audio.pause();
-      audio.currentTime = 0;
+      // Stop audio
+      welcomeAudio.pause();
+      welcomeAudio.currentTime = 0;
 
       // Hide welcome screen, show countdown
       document.getElementById("welcomeScreen").style.display = "none";
