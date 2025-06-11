@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>UTP Super App Launch</title>
   <style>
     body {
@@ -81,13 +81,14 @@
     }
 
     .launch-logo {
+      /* max-width: 150px;
+      margin-bottom: 20px; */
       max-width: 300px;
       margin-bottom: 20px;
     }
   </style>
 </head>
-<body onload="playWelcomeSound()">
-
+<body>
   <!-- Welcome screen -->
   <div class="launch-container" id="welcomeScreen">
     <h1>🎉 Welcome to UTP Super App 🎉</h1>
@@ -110,18 +111,8 @@
   <!-- Confetti background -->
   <div class="confetti" id="confetti"></div>
 
-  <!-- Audio Elements -->
-  <audio id="welcomeSound" src="https://cdn.pixabay.com/audio/2023/05/17/audio_d5dc02d26a.mp3" preload="auto"></audio> <!-- Soft intro -->
-  <audio id="countdownSound" src="https://cdn.pixabay.com/audio/2022/03/02/audio_5dce33c23b.mp3" preload="auto"></audio> <!-- Countdown beep -->
-  <audio id="launchSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_0ff218a632.mp3" preload="auto"></audio> <!-- Drum reveal -->
-
   <!-- JavaScript logic -->
   <script>
-    function playWelcomeSound() {
-      const sound = document.getElementById("welcomeSound");
-      sound.play();
-    }
-
     function startCountdown() {
       document.getElementById("welcomeScreen").style.display = "none";
       const countdown = document.getElementById("countdownContainer");
@@ -129,9 +120,6 @@
       countdown.style.display = "block";
 
       let count = 3;
-      countDisplay.innerText = count;
-      document.getElementById("countdownSound").play();
-
       const interval = setInterval(() => {
         count--;
         if (count > 0) {
@@ -139,7 +127,6 @@
           countDisplay.style.animation = 'none';
           void countDisplay.offsetWidth;
           countDisplay.style.animation = 'pop 0.8s ease-in-out';
-          document.getElementById("countdownSound").play();
         } else {
           clearInterval(interval);
           countdown.style.display = "none";
@@ -151,7 +138,6 @@
     function launchApp() {
       document.getElementById("launchScreen").style.display = "block";
       document.getElementById("confetti").style.display = "block";
-      document.getElementById("launchSound").play();
     }
   </script>
 </body>
