@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>UTP Super App Launch</title>
   <style>
     body {
@@ -25,7 +25,7 @@
     }
 
     h1 {
-      font-size: 3rem;
+      font-size: 10rem;
       margin-bottom: 10px;
     }
 
@@ -61,6 +61,7 @@
       height: 100%;
       background: url('https://media.giphy.com/media/CgmUXYRV2KCRhU8tip/giphy.gif') center/cover no-repeat;
       display: none;
+      z-index: -1;
     }
 
     @keyframes fadeIn {
@@ -81,8 +82,6 @@
     }
 
     .launch-logo {
-      /* max-width: 150px;
-      margin-bottom: 20px; */
       max-width: 300px;
       margin-bottom: 20px;
     }
@@ -103,13 +102,16 @@
 
   <!-- Final Launch screen -->
   <div id="launchScreen" class="launch-screen now-live">
-    <img src="images/logo1.png" alt="UTP Super App Logo" class="launch-logo">
+    <img src="logo1.png" alt="UTP Super App Logo" class="launch-logo" />
     <h1>🚀 UTP Super App is Now Live!</h1>
     <p>Thank you for being part of this amazing journey!</p>
   </div>
 
   <!-- Confetti background -->
   <div class="confetti" id="confetti"></div>
+
+  <!-- Welcome sound -->
+  <audio id="welcomeSound" src="sounds/Launch1.mp3" preload="auto"></audio>
 
   <!-- JavaScript logic -->
   <script>
@@ -118,6 +120,12 @@
       const countdown = document.getElementById("countdownContainer");
       const countDisplay = document.getElementById("countDisplay");
       countdown.style.display = "block";
+
+      // Play welcome sound
+      const sound = document.getElementById("welcomeSound");
+      sound.play().catch((e) => {
+        console.error("Audio play failed:", e);
+      });
 
       let count = 3;
       const interval = setInterval(() => {
