@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>UTP Super App Launch</title>
   <style>
     body {
@@ -81,14 +81,15 @@
     }
 
     .launch-logo {
-      /* max-width: 150px;
-      margin-bottom: 20px; */
       max-width: 300px;
       margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
+  <!-- Welcome sound -->
+  <audio id="welcomeAudio" src="Music/Launch1.mp3" preload="auto"></audio>
+
   <!-- Welcome screen -->
   <div class="launch-container" id="welcomeScreen">
     <h1>🎉 Welcome to UTP Super App 🎉</h1>
@@ -113,6 +114,14 @@
 
   <!-- JavaScript logic -->
   <script>
+    // Play welcome sound on page load
+    window.onload = function () {
+      const audio = document.getElementById("welcomeAudio");
+      audio.play().catch((e) => {
+        console.log("Audio play prevented by browser:", e);
+      });
+    };
+
     function startCountdown() {
       document.getElementById("welcomeScreen").style.display = "none";
       const countdown = document.getElementById("countdownContainer");
