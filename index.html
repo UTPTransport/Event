@@ -145,22 +145,47 @@
 
     let musicPlaying = false;
 
-    // Toggle background music
+    // Fade audio helper
+    function fadeAudio(audio, from, to, duration) {
+      const stepTime = 50;
+      const steps = duration / stepTime;
+      let currentStep = 0;
+      const stepSize = (to - from) / steps;
+      audio.volume = from;
+      const fade = setInterval(() => {
+        currentStep++;
+        audio.volume = Math.max(0, Math.min(1, audio.volume + stepSize));
+        if (currentStep >= steps) {
+          clearInterval(fade);
+          if (to === 0) audio.pause();
+        }
+      }, stepTime);
+    }
+
+    // Toggle background music with fade-in
     musicToggle.addEventListener("click", () => {
       if (!musicPlaying) {
+        bgMusic.volume = 0;
         bgMusic.play().then(() => {
+          fadeAudio(bgMusic, 0, 1, 1000);
           musicPlaying = true;
           musicToggle.innerText = "🔊 Music Playing";
-        }).catch(err => {
-          console.error("Error playing music:", err);
-        });
+        }).catch(err => console.error("Music play error:", err));
       }
     });
 
-    // Launch sequence
+    // Launch sequence with fade logic
     launchButton.addEventListener("click", () => {
-      bgMusic.pause();
-      countdownSound.play().catch(err => console.log("Countdown sound error:", err));
+      fadeAudio(bgMusic, bgMusic.volume, 0, 1000); // fade out bg music
+
+      // Wait 1s for fade out
+      setTimeout(() => {
+        countdownSound.volume = 0;
+        countdownSound.play().then(() => {
+          fadeAudio(countdownSound, 0, 1, 1000); // fade in countdown
+        });
+      }, 1000);
+
       startCountdown();
     });
 
@@ -181,6 +206,10 @@
         } else {
           clearInterval(interval);
           countdown.style.display = "none";
+
+          // Fade out countdown sound
+          fadeAudio(countdownSound, countdownSound.volume, 0, 1000);
+
           launchApp();
         }
       }, 1000);
@@ -189,7 +218,11 @@
     function launchApp() {
       document.getElementById("launchScreen").style.display = "block";
       document.getElementById("confetti").style.display = "block";
-      finalMusic.play().catch(err => console.log("Final music play error:", err));
+
+      finalMusic.volume = 0;
+      finalMusic.play().then(() => {
+        fadeAudio(finalMusic, 0, 1, 1500); // fade in final music
+      }).catch(err => console.error("Final music play error:", err));
     }
   </script>
 </body>
