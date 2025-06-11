@@ -17,6 +17,7 @@
       height: 100vh;
       text-align: center;
       overflow: hidden;
+      position: relative;
     }
 
     .launch-container, .countdown-container, .launch-screen {
@@ -50,7 +51,21 @@
       background-color: #ffaa00;
     }
 
-    .countdown-container, .launch-screen {
+    .music-button {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background-color: #ffffff33;
+      border: 2px solid #fff;
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      z-index: 999;
+    }
+
+    .now-live, .countdown-container {
       display: none;
       animation: fadeIn 1s ease-in forwards;
     }
@@ -61,6 +76,7 @@
       height: 100%;
       background: url('https://media.giphy.com/media/CgmUXYRV2KCRhU8tip/giphy.gif') center/cover no-repeat;
       display: none;
+      z-index: 1;
     }
 
     @keyframes fadeIn {
@@ -84,24 +100,12 @@
       max-width: 300px;
       margin-bottom: 20px;
     }
-
-    /* Hidden play button */
-    .hidden-play {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      width: 20px;
-      height: 20px;
-      opacity: 0.01;
-      z-index: 1000;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
 
-  <!-- Invisible Play Trigger -->
-  <button id="hiddenPlay" class="hidden-play" title="Click anywhere to enable sound"></button>
+  <!-- Music Control Button -->
+  <button id="musicToggle" class="music-button">🎵 Play Music</button>
 
   <!-- Welcome screen -->
   <div class="launch-container" id="welcomeScreen">
@@ -116,7 +120,7 @@
   </div>
 
   <!-- Final Launch screen -->
-  <div id="launchScreen" class="launch-screen">
+  <div id="launchScreen" class="launch-screen now-live">
     <img src="images/logo1.png" alt="UTP Super App Logo" class="launch-logo">
     <h1>🚀 UTP Super App is Now Live!</h1>
     <p>Thank you for being part of this amazing journey!</p>
@@ -125,35 +129,39 @@
   <!-- Confetti background -->
   <div class="confetti" id="confetti"></div>
 
-  <!-- Audio elements -->
-  <audio id="welcomeAudio" src="Music/Launch5.mp3" loop></audio>
-  <audio id="countdownAudio" src="Music/countdown.mp3"></audio>
-  <audio id="launchFinalAudio" src="Music/launch_reveal.mp3"></audio>
+  <!-- Audio -->
+  <audio id="bgMusic" src="Music/Launch5.mp3" loop></audio>
+  <audio id="countdownSound" src="Music/CountDown(3 to 1).mp3"></audio>
+  <audio id="finalMusic" src="Music/FinalReveal.mp3"></audio>
 
   <!-- JavaScript -->
   <script>
-    const hiddenPlayBtn = document.getElementById("hiddenPlay");
-    const launchButton = document.getElementById("launchButton");
-    const welcomeAudio = document.getElementById("welcomeAudio");
-    const countdownAudio = document.getElementById("countdownAudio");
-    const launchFinalAudio = document.getElementById("launchFinalAudio");
+    const bgMusic = document.getElementById("bgMusic");
+    const countdownSound = document.getElementById("countdownSound");
+    const finalMusic = document.getElementById("finalMusic");
 
-    // Step 1: Play background looped music after user interacts
-    hiddenPlayBtn.addEventListener("click", () => {
-      welcomeAudio.play().then(() => {
-        console.log("Background music started.");
-      }).catch(err => {
-        console.error("Failed to play background music:", err);
-      });
+    const musicToggle = document.getElementById("musicToggle");
+    const launchButton = document.getElementById("launchButton");
+
+    let musicPlaying = false;
+
+    // Toggle background music
+    musicToggle.addEventListener("click", () => {
+      if (!musicPlaying) {
+        bgMusic.play().then(() => {
+          musicPlaying = true;
+          musicToggle.innerText = "🔊 Music Playing";
+        }).catch(err => {
+          console.error("Error playing music:", err);
+        });
+      }
     });
 
-    // Step 2: On Launch Button Click
+    // Launch sequence
     launchButton.addEventListener("click", () => {
-      welcomeAudio.pause(); // Stop background loop
-      welcomeAudio.currentTime = 0;
-
-      countdownAudio.play(); // Play countdown SFX
-      startCountdown(); // Begin countdown
+      bgMusic.pause();
+      countdownSound.play().catch(err => console.log("Countdown sound error:", err));
+      startCountdown();
     });
 
     function startCountdown() {
@@ -181,11 +189,7 @@
     function launchApp() {
       document.getElementById("launchScreen").style.display = "block";
       document.getElementById("confetti").style.display = "block";
-
-      // Play final launch music
-      launchFinalAudio.play().catch(err => {
-        console.error("Launch music error:", err);
-      });
+      finalMusic.play().catch(err => console.log("Final music play error:", err));
     }
   </script>
 </body>
