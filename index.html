@@ -61,7 +61,6 @@
       height: 100%;
       background: url('https://media.giphy.com/media/CgmUXYRV2KCRhU8tip/giphy.gif') center/cover no-repeat;
       display: none;
-      z-index: -1;
     }
 
     @keyframes fadeIn {
@@ -87,7 +86,8 @@
     }
   </style>
 </head>
-<body>
+<body onload="playWelcomeSound()">
+
   <!-- Welcome screen -->
   <div class="launch-container" id="welcomeScreen">
     <h1>🎉 Welcome to UTP Super App 🎉</h1>
@@ -102,7 +102,7 @@
 
   <!-- Final Launch screen -->
   <div id="launchScreen" class="launch-screen now-live">
-    <img src="logo1.png" alt="UTP Super App Logo" class="launch-logo" />
+    <img src="logo1.png" alt="UTP Super App Logo" class="launch-logo">
     <h1>🚀 UTP Super App is Now Live!</h1>
     <p>Thank you for being part of this amazing journey!</p>
   </div>
@@ -110,24 +110,28 @@
   <!-- Confetti background -->
   <div class="confetti" id="confetti"></div>
 
-  <!-- Welcome sound -->
-  <audio id="welcomeSound" src="sounds/Launch1.mp3" preload="auto"></audio>
+  <!-- Audio Elements -->
+  <audio id="welcomeSound" src="https://cdn.pixabay.com/audio/2023/05/17/audio_d5dc02d26a.mp3" preload="auto"></audio> <!-- Soft intro -->
+  <audio id="countdownSound" src="https://cdn.pixabay.com/audio/2022/03/02/audio_5dce33c23b.mp3" preload="auto"></audio> <!-- Countdown beep -->
+  <audio id="launchSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_0ff218a632.mp3" preload="auto"></audio> <!-- Drum reveal -->
 
   <!-- JavaScript logic -->
   <script>
+    function playWelcomeSound() {
+      const sound = document.getElementById("welcomeSound");
+      sound.play();
+    }
+
     function startCountdown() {
       document.getElementById("welcomeScreen").style.display = "none";
       const countdown = document.getElementById("countdownContainer");
       const countDisplay = document.getElementById("countDisplay");
       countdown.style.display = "block";
 
-      // Play welcome sound
-      const sound = document.getElementById("welcomeSound");
-      sound.play().catch((e) => {
-        console.error("Audio play failed:", e);
-      });
-
       let count = 3;
+      countDisplay.innerText = count;
+      document.getElementById("countdownSound").play();
+
       const interval = setInterval(() => {
         count--;
         if (count > 0) {
@@ -135,6 +139,7 @@
           countDisplay.style.animation = 'none';
           void countDisplay.offsetWidth;
           countDisplay.style.animation = 'pop 0.8s ease-in-out';
+          document.getElementById("countdownSound").play();
         } else {
           clearInterval(interval);
           countdown.style.display = "none";
@@ -146,6 +151,7 @@
     function launchApp() {
       document.getElementById("launchScreen").style.display = "block";
       document.getElementById("confetti").style.display = "block";
+      document.getElementById("launchSound").play();
     }
   </script>
 </body>
