@@ -87,9 +87,6 @@
   </style>
 </head>
 <body>
-  <!-- Welcome sound -->
-  <audio id="welcomeAudio" src="Music/Launch1.mp3" preload="auto"></audio>
-
   <!-- Welcome screen -->
   <div class="launch-container" id="welcomeScreen">
     <h1>🎉 Welcome to UTP Super App 🎉</h1>
@@ -112,17 +109,25 @@
   <!-- Confetti background -->
   <div class="confetti" id="confetti"></div>
 
+  <!-- Background welcome audio -->
+  <audio id="welcomeAudio" src="Music/Launch1.mp3" loop></audio>
+
   <!-- JavaScript logic -->
   <script>
-    // Play welcome sound on page load
-    window.onload = function () {
-      const audio = document.getElementById("welcomeAudio");
-      audio.play().catch((e) => {
-        console.log("Audio play prevented by browser:", e);
+    window.addEventListener('DOMContentLoaded', () => {
+      const audio = document.getElementById('welcomeAudio');
+      audio.play().catch((error) => {
+        console.log('Autoplay was blocked. Will play on user interaction.');
       });
-    };
+    });
 
     function startCountdown() {
+      // Stop background music
+      const audio = document.getElementById('welcomeAudio');
+      audio.pause();
+      audio.currentTime = 0;
+
+      // Hide welcome screen, show countdown
       document.getElementById("welcomeScreen").style.display = "none";
       const countdown = document.getElementById("countdownContainer");
       const countDisplay = document.getElementById("countDisplay");
